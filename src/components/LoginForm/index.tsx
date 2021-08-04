@@ -25,7 +25,7 @@ export default function LoginForm(props: FormValues) {
   const toast = useToast();
   const router = useRouter();
 
-  const SignUpSchema = yup.object().shape({
+  const LoginSchema = yup.object().shape({
     email: yup.string().email("Email inválido").required("Campo obrigatório."),
     password: yup
       .string()
@@ -59,7 +59,7 @@ export default function LoginForm(props: FormValues) {
           });
         }
       }}
-      validationSchema={SignUpSchema}
+      validationSchema={LoginSchema}
     >
       {({
         touched,

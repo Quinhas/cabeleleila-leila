@@ -10,6 +10,7 @@ export default function Menu() {
   const pages = [
     { name: "Início", href: "/" },
     { name: "Meus Agendamentos", href: "/agendamentos" },
+    { name: "Novo Agendamento", href: "/agendamentos/new" },
   ];
   const adminPages = [
     { name: "Painel", href: "/" },
@@ -31,11 +32,7 @@ export default function Menu() {
               key={page.href}
               name={page.name}
               href={page.href}
-              variant={
-                router.pathname.split("/")[1] === page.href.split("/")[1]
-                  ? "active"
-                  : ""
-              }
+              variant={router.pathname === page.href ? "active" : ""}
             />
           ))}
         {isAdmin &&
@@ -44,11 +41,7 @@ export default function Menu() {
               key={page.href}
               name={page.name}
               href={page.href}
-              variant={
-                router.pathname.split("/")[1] === page.href.split("/")[1]
-                  ? "active"
-                  : ""
-              }
+              variant={router.pathname === page.href ? "active" : ""}
             />
           ))}
       </Flex>
