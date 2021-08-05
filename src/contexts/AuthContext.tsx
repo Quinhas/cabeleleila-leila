@@ -57,9 +57,14 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
           email: email,
         };
 
-        await database.ref(`users/${newUser.id}`).update(newUser);
+        await database.ref(`usuarios/${newUser.id}`).update(newUser);
+        if (email === "admin@admin.com") {
+          await database
+            .ref(`usuarios/${newUser.id}`)
+            .update({ role: "ADMIN" });
+        }
         const firebaseUser = (
-          await database.ref(`users/${newUser.id}`).once("value")
+          await database.ref(`usuarios/${newUser.id}`).once("value")
         ).val();
         if (firebaseUser.role === "ADMIN") {
           setIsAdmin(true);
@@ -106,7 +111,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         email: email,
       };
 
-      await database.ref(`/users/${newUser.id}`).update(newUser);
+      await database.ref(`/usuarios/${newUser.id}`).update(newUser);
 
       setUser(newUser);
       setIsLogged(true);
@@ -147,7 +152,9 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
             color="primaryApp.500"
             size="xl"
           />
-          <Text color="gray.500" fontFamily={'heading'}>Carregando...</Text>
+          <Text color="gray.500" fontFamily={"heading"}>
+            Carregando...
+          </Text>
         </Flex>
       </Flex>
     );

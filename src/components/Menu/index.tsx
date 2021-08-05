@@ -15,6 +15,7 @@ export default function Menu() {
   const adminPages = [
     { name: "Painel", href: "/" },
     { name: "Agendamentos", href: "/agendamentos/admin" },
+    { name: "Serviços", href: "/services" },
   ];
 
   return (

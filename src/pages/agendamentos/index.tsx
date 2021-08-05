@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 type AgendamentoProps = {
   date: string;
   hour: string;
-  services: { name: string; desc: string; value: number }[];
+  services?: { name: string; desc: string; value: number }[];
   phone: string;
   status: string;
   id: string;
@@ -37,9 +37,31 @@ export default function Agendamentos() {
     }
     const agendamentosRef = database
       .ref(`agendamentos`)
-      .orderByChild("customerUid")
+      .orderByChild("clienteId")
       .equalTo(user.id);
     agendamentosRef.on("value", async (snap) => {
+      const res: Record<
+        string,
+        {
+          date: string;
+          hour: string;
+          services: { name: string; desc: string; value: number }[];
+          phone: string;
+          status: string;
+          id: string;
+        }
+      > = snap.val();
+      const agendamentos: AgendamentoProps[] = Object.values(res ?? []).map(
+        (agendamento) => {
+          return {
+            date: agendamento.date,
+            hour: agendamento.hour,
+            id: agendamento.id,
+            phone: agendamento.phone,
+            status: agendamento.status,
+          };
+        }
+      );
       setLoading(false);
     });
 

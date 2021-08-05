@@ -26,6 +26,13 @@ export default function Agendamentos() {
   const router = useRouter();
   const { colorMode } = useColorMode();
 
+  useEffect(() => {
+    if (!isLogged) {
+      router.push("/");
+      return;
+    }
+  }, [isLogged, router]);
+
   return (
     <>
       <Navbar />
@@ -35,7 +42,7 @@ export default function Agendamentos() {
         direction={"column"}
         gridGap={"1rem"}
         align={"center"}
-        px={'2rem'}
+        px={"2rem"}
       >
         <Heading>Agendar Serviço</Heading>
         <CreateAgendamentoForm />

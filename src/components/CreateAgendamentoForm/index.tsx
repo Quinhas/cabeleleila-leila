@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -7,17 +8,17 @@ import {
   FormLabel,
   Input,
   Select,
+  Text,
   useColorMode,
   useToast,
 } from "@chakra-ui/react";
 import { useAuth } from "@hooks/useAuth";
 import { Field, FieldProps, Form, Formik } from "formik";
-import router from "next/router";
-import React, { useState } from "react";
-import { FaSignInAlt } from "react-icons/fa";
+import router, { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import InputMask from "react-input-mask";
-import { format, sub } from "date-fns";
+import { format, add } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { database } from "@services/firebase";
 
@@ -28,12 +29,21 @@ type CreateAgendamentoFormProps = {
   hour?: string;
 };
 
+type ServiceProps = {
+  name: string;
+  desc: string;
+  price: number;
+  priceFormatted: string;
+  id: string;
+};
+
 const defaultHours = [
   "8:00",
   "9:00",
   "10:00",
   "11:00",
   "12:00",
+  "13:00",
   "14:00",
   "15:00",
   "16:00",
@@ -44,9 +54,42 @@ export default function CreateAgendamentoForm(
   props: CreateAgendamentoFormProps
 ) {
   const [availableHours, setAvailableHours] = useState<string[]>(defaultHours);
+  const [loadingAvailableHours, setLoadingAvailableHours] = useState(true);
+  const [services, setServices] = useState<ServiceProps[]>([]);
+  const [selectedServices, setSelectedServices] = useState<ServiceProps[]>([]);
   const { user } = useAuth();
   const toast = useToast();
   const { colorMode } = useColorMode();
+  const router = useRouter();
+
+  useEffect(() => {
+    const servicesRef = database.ref(`servicos`);
+    servicesRef.on("value", (snap) => {
+      const res: Record<
+        string,
+        { name: string; desc: string; price: number; id: string }
+      > = snap.val();
+      const services: ServiceProps[] = Object.values(res ?? []).map(
+        (service) => {
+          return {
+            desc: service.desc,
+            id: service.id,
+            name: service.name,
+            priceFormatted: new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(service.price),
+            price: Number(service.price),
+          };
+        }
+      );
+      setServices(services);
+    });
+
+    return () => {
+      servicesRef.off("value");
+    };
+  }, []);
 
   const AgendamentoSchema = yup.object().shape({
     name: yup.string().required("Campo obrigatório."),
@@ -63,9 +106,9 @@ export default function CreateAgendamentoForm(
     date: yup
       .date()
       .min(
-        sub(new Date(), { days: 1 }),
+        add(new Date(), { days: 2 }),
         `A data de início deve ser depois de ${format(
-          sub(new Date(), { days: 1 }),
+          add(new Date(), { days: 2 }),
           "P",
           {
             locale: ptBR,
@@ -73,18 +116,18 @@ export default function CreateAgendamentoForm(
         )}`
       )
       .required("Campo obrigatório."),
+    hour: yup.string().required("Campo obrigatório."),
   });
 
   const handleDateChange = async (date: string) => {
+    setLoadingAvailableHours(true);
     if (!date || date.trim().length === 0) {
       setAvailableHours(defaultHours);
+      setLoadingAvailableHours(false);
       return;
     }
     try {
-      const agendamentosRef = database
-        .ref(`/agendamentos`)
-        .orderByChild("date")
-        .equalTo(date);
+      const agendamentosRef = database.ref(`/indisponivel/${date}`);
       const firebaseAgendamentos: Record<
         string,
         {
@@ -96,28 +139,47 @@ export default function CreateAgendamentoForm(
         }
       > = (await agendamentosRef.once("value")).val();
       const agendamentos = Object.entries(firebaseAgendamentos ?? []);
-      console.log(agendamentos);
-      const hours = agendamentos.map(([key, agendamento]) => {
-        return agendamento.hour;
+      const hours = agendamentos.map(([key]) => {
+        return `${key}:00`;
       });
       const newAvailableHours = [...defaultHours].filter(
         (hour) => !hours.includes(hour)
       );
       setAvailableHours(newAvailableHours);
-    } catch (error) {}
+      setLoadingAvailableHours(false);
+    } catch (error) {
+      toast({
+        description: error.message,
+        status: "error",
+      });
+      setLoadingAvailableHours(false);
+    }
+  };
+
+  const handleServiceClick = (service: ServiceProps) => {
+    if (selectedServices.includes(service)) {
+      const newSelected = [...selectedServices].filter(
+        (selected) => selected.id !== service.id
+      );
+      setSelectedServices(newSelected);
+    } else {
+      const newSelected = [...selectedServices];
+      newSelected.push(service);
+      setSelectedServices(newSelected);
+    }
   };
 
   const initialValues = {
     name: props.name ?? user?.name ?? "",
     phone: props.phone ?? "",
     date: props.date ?? "",
-    hour: props.hour ?? "",
+    hour: props.hour ?? availableHours[0] ?? "",
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={async (values) => {
+      onSubmit={async (values, { resetForm }) => {
         try {
           const agendamentosRef = database.ref(`agendamentos`);
           const key = agendamentosRef.push().key;
@@ -131,13 +193,26 @@ export default function CreateAgendamentoForm(
             status: "Pendente",
             id: key,
             clienteId: user?.id,
+            services: selectedServices,
           };
-          agendamentosRef.child(key).update(newAgendamento);
+          await agendamentosRef.child(key).update(newAgendamento);
+          const unavailableRef = database.ref(`indisponivel/${values.date}`);
+          const selectedHour = Number(values.hour.split(":")[0]);
+          await Promise.all(
+            selectedServices.map(async (value, index) => {
+              await unavailableRef
+                .child(String(selectedHour + index))
+                .set(user?.id);
+            })
+          );
           toast({
             description: "Agendamento marcado com sucesso.",
             status: "success",
             isClosable: true,
           });
+          await router.push("/agendamentos");
+          setSelectedServices([]);
+          resetForm();
         } catch (error) {
           toast({
             description: error.message,
@@ -212,12 +287,15 @@ export default function CreateAgendamentoForm(
                     {...field}
                     type="date"
                     placeholder="Data do Atendimento"
-                    min={format(new Date(), "yyyy-MM-dd")}
+                    min={format(add(new Date(), { days: 3 }), "yyyy-MM-dd")}
                     h={"2.875rem"}
                     borderRadius={"0.5rem"}
                     p={"0 1rem"}
                     border={"1px solid"}
-                    onBlur={() => handleDateChange(values.date)}
+                    onBlur={(e) => {
+                      field.onBlur(e);
+                      handleDateChange(values.date);
+                    }}
                   />
                 )}
               </Field>
@@ -226,7 +304,7 @@ export default function CreateAgendamentoForm(
             </FormControl>
 
             <FormControl
-              isDisabled={!values.date}
+              isDisabled={!values.date || loadingAvailableHours}
               isInvalid={errors.hour && touched.hour ? true : false}
               w={"50%"}
             >
@@ -270,12 +348,51 @@ export default function CreateAgendamentoForm(
             </FormControl>
           </Flex>
 
+          <Text
+            fontFamily={"heading"}
+            fontWeight={"semibold"}
+            fontSize={"1.25rem"}
+          >
+            Serviços
+          </Text>
+          <Flex wrap={"wrap"} gridRowGap={"0.5rem"}>
+            {services &&
+              services.map((service) => {
+                return (
+                  <Checkbox
+                    key={service.id}
+                    w={"50%"}
+                    onChange={() => handleServiceClick(service)}
+                    isChecked={
+                      selectedServices.find(
+                        (selected) => selected.id === service.id
+                      )
+                        ? true
+                        : false
+                    }
+                    defaultIsChecked={
+                      selectedServices.find(
+                        (selected) => selected.id === service.id
+                      )
+                        ? true
+                        : false
+                    }
+                  >
+                    {service.name} - {service.priceFormatted}
+                  </Checkbox>
+                );
+              })}
+          </Flex>
+          <Text fontSize={"0.875rem"} color={"gray.500"}>
+            Cada serviço possui tempo médio de 1 hora.
+          </Text>
+
           <Button
             type="submit"
             variant={"app"}
             w={"100%"}
             mt={"1rem"}
-            isDisabled={!dirty || !isValid}
+            isDisabled={!dirty || !isValid || selectedServices.length === 0}
             isLoading={isSubmitting}
           >
             Agendar
