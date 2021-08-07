@@ -77,6 +77,21 @@ NEXT_PUBLIC_APP_ID="1:238209154302:web:bb0f57faf8e2d2cac079af"
 NEXT_PUBLIC_MEASUREMENT_ID="G-9XDMNQH4FD"
 ```
 
+## 🔐 Parte Operacional
+
+#### Caso esteja utilizando seu projeto no Firebase:
+
+Crie um usuário com o e-mail "admin@admin.com" com a senha que desejar, e pronto.
+
+#### Caso esteja utilizando meu projeto:
+
+Faça login com o usuário:
+
+```
+E-mail: admin@admin.com
+Senha: dsincabeleleilaleila
+```
+
 ## 📝 Licença
 
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para obter mais detalhes.
