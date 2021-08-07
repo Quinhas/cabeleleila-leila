@@ -8,22 +8,15 @@ import {
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
-import CreateAgendamentoForm from "@components/CreateAgendamentoForm";
+import CreateAgendamentoForm from "@components/AgendamentoForm";
 import ModalService from "@components/ModalService";
 import { Navbar } from "@components/Navbar";
 import { useAuth } from "@hooks/useAuth";
 import { database } from "@services/firebase";
+import { ServiceProps } from "@utils/types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
-
-type ServiceProps = {
-  name: string;
-  desc: string;
-  price: number;
-  priceFormatted: string;
-  id: string;
-};
 
 export default function Agendamentos() {
   const { isAdmin, isLogged } = useAuth();

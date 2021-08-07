@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
-export default function Agendamentos() {
+export default function AgendamentosAdmin() {
   const [agendamentos, setAgendamentos] = useState<AgendamentoProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [actualPage, setActualPage] = useState(0);
@@ -26,26 +26,19 @@ export default function Agendamentos() {
 
   useEffect(() => {
     setLoading(true);
-    if (!isLogged || !user?.id) {
+    if (!isLogged || !user?.id || !isAdmin) {
       router.push("/");
       return;
     }
-    if (isAdmin) {
-      router.push("/agendamentos/admin");
-      return;
-    }
-    const agendamentosRef = database
-      .ref(`agendamentos`)
-      .orderByChild("clienteId")
-      .equalTo(user.id);
+    const agendamentosRef = database.ref(`agendamentos`);
     agendamentosRef.on("value", async (snap) => {
       const res: Record<string, AgendamentoProps> = snap.val();
-      const agendamentos: AgendamentoProps[] = Object.values(res ?? []).map(
-        (agendamento) => {
+      const agendamentos: AgendamentoProps[] = await Promise.all(
+        Object.values(res ?? []).map(async (agendamento) => {
           return {
             ...agendamento,
           };
-        }
+        })
       );
       setAgendamentos(agendamentos);
       setLoading(false);

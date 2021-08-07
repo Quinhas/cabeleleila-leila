@@ -10,18 +10,12 @@ import AgendamentoForm from "@components/AgendamentoForm";
 import { Navbar } from "@components/Navbar";
 import { useAuth } from "@hooks/useAuth";
 import { database } from "@services/firebase";
+import { AgendamentoProps, ServiceProps } from "@utils/types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-type AgendamentoProps = {
-  date: string;
-  services: { name: string; desc: string; value: number }[];
-  phone: string;
-  status: string;
-  id: string;
-};
-
-export default function NovoAgendamento() {
+export default function EditarAgendamento() {
+  const [agendamento, setAgendamento] = useState<AgendamentoProps>();
   const { user, isLogged } = useAuth();
   const router = useRouter();
   const { colorMode } = useColorMode();
@@ -31,6 +25,16 @@ export default function NovoAgendamento() {
       router.push("/");
       return;
     }
+    const uid = router.query.id;
+    const agendamentoRef = database.ref(`agendamentos/${uid}`);
+    agendamentoRef.on("value", (snap) => {
+      const res: AgendamentoProps = snap.val();
+      setAgendamento(res);
+    });
+
+    return () => {
+      agendamentoRef.off("value");
+    };
   }, [isLogged, router]);
 
   return (
@@ -44,8 +48,8 @@ export default function NovoAgendamento() {
         align={"center"}
         px={"2rem"}
       >
-        <Heading>Agendar Serviço</Heading>
-        <AgendamentoForm />
+        <Heading>Editar Agendamento</Heading>
+        {agendamento && <AgendamentoForm {...agendamento} />}
       </Flex>
     </>
   );

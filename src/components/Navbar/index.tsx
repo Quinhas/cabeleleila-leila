@@ -54,6 +54,9 @@ export function Navbar() {
         px={"1.5rem"}
         justify={"space-between"}
         boxShadow={"sm"}
+        top={0}
+        position={'sticky'}
+        zIndex={999}
       >
         <Flex
           gridGap={"1rem"}
