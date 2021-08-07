@@ -1,34 +1,84 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">Cabeleleila Leila Salão de Beleiza</h1>
 
-## Getting Started
+<p align="center">
+  <img  src="https://img.shields.io/static/v1?label=license&message=MIT&color=5965E0&labelColor=121214" alt="License">
+  
+  <img src="https://img.shields.io/github/forks/Quinhas/cabeleleila-leila?label=forks&message=MIT&color=5965E0&labelColor=121214" alt="Forks">
 
-First, run the development server:
+  <img src="https://img.shields.io/github/stars/Quinhas/cabeleleila-leila?label=stars&message=MIT&color=5965E0&labelColor=121214" alt="Stars">
+</p>
+
+[Demo](https://cabeleleila-leila.vercel.app/)
+
+## ✨ Tecnologias
+
+Esse projeto foi desenvolvido com as seguintes tecnologias:
+
+- [React](https://reactjs.org)
+  - Biblioteca JS criada e mantida pelo Facebook para criação de interfaces.
+- [Next.js](https://nextjs.org/)
+  - [Next.js é mantido pela zeit e pela comunidade open-source, e visa agilizar o processo de construção de um app React oferecendo componentes para rota, suporte a SSR (server side rendering) além de webpack já configurado para React e transpilação de ES6 e ES7 que incluem recursos como async e await. Mesmo com tudo isso, ele mantém o início simples e flexível o bastante pra escalar o projeto para o tamanho que for necessário.](https://medium.com/matilha-est%C3%BAdio/porque-voc%C3%AA-precisa-conhecer-o-next-js-358f6ba4c1ee)
+- [TypeScript](https://www.typescriptlang.org/)
+  - [TypeScript é um superconjunto de JavaScript, ou seja, um conjunto de ferramentas e formas mais eficientes de escrever código JavaScript, adicionando recursos que não estão presentes de maneira nativa na linguagem.](https://tecnoblog.net/426754/o-que-e-typescript-guia-para-iniciantes/)
+- [Firebase](https://firebase.google.com/)
+  - [O Firebase é a plataforma de desenvolvimento de aplicativos móveis do Google que ajuda você a criar, melhorar e expandir seu aplicativo.](https://blog.geekhunter.com.br/firebase-o-que-e-e-quando-usar-no-desenvolvimento-mobile/#O_que_e_Firebase)
+- [ChakraUI](https://chakra-ui.com/)
+  - [Chakra UI é uma biblioteca de componentes simples, modular e acessível que fornece os blocos de construção de que você precisa para construir seus aplicativos React.](https://chakra-ui.com/)
+
+## 🚀 Iniciando o Projeto
 
 ```bash
-npm run dev
-# or
-yarn dev
+# Clone o repositório e entre na pasta do projeto
+$ git clone https://github.com/Quinhas/cabeleleila-leila.git && cd cabeleleila-leila
+
+# Instale as dependências
+$ npm install
+# ou
+$ yarn install
+
+# Execute a aplicação
+$ npm start
+# ou
+$ yarn start
+
+# Abra http://localhost:3000 no seu navegador para ver a aplicação rodando!
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⭐ Configurando o Firebase
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+#### Caso queira criar seu próprio projeto no Firebase
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.tsx`.
+Crie um projeto no [Firebase](https://firebase.google.com/?hl=pt-br), ative o Realtime Database e a autenticação com Google e com E-mail/senha.
+Adicione um arquivo `.env.local` na raiz do projeto com o seguinte formato:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```shell
+NEXT_PUBLIC_API_KEY= ADICIONE AQUI SEUS DADOS
+NEXT_PUBLIC_AUTH_DOMAIN= ADICIONE AQUI SEUS DADOS
+NEXT_PUBLIC_DATABASE_URL= ADICIONE AQUI SEUS DADOS
+NEXT_PUBLIC_PROJECT_ID= ADICIONE AQUI SEUS DADOS
+NEXT_PUBLIC_STORAGE_BUCKET= ADICIONE AQUI SEUS DADOS
+NEXT_PUBLIC_MESSAGINING_SENDER_ID= ADICIONE AQUI SEUS DADOS
+NEXT_PUBLIC_APP_ID= ADICIONE AQUI SEUS DADOS
+NEXT_PUBLIC_MEASUREMENT_ID= ADICIONE AQUI SEUS DADOS
+```
 
-## Learn More
+#### Caso queira utilizar meu projeto já existente
 
-To learn more about Next.js, take a look at the following resources:
+Adicione um arquivo `.env.local` na raiz do projeto com o seguinte formato:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```shell
+NEXT_PUBLIC_API_KEY="AIzaSyB7bNltkNPGIUbSo1UP4zTcMjysotdIOoQ"
+NEXT_PUBLIC_AUTH_DOMAIN="cabeleleila-leila.firebaseapp.com"
+NEXT_PUBLIC_DATABASE_URL="https://cabeleleila-leila-default-rtdb.firebaseio.com"
+NEXT_PUBLIC_PROJECT_ID="cabeleleila-leila"
+NEXT_PUBLIC_STORAGE_BUCKET="cabeleleila-leila.appspot.com"
+NEXT_PUBLIC_MESSAGINING_SENDER_ID="238209154302"
+NEXT_PUBLIC_APP_ID="1:238209154302:web:bb0f57faf8e2d2cac079af"
+NEXT_PUBLIC_MEASUREMENT_ID="G-9XDMNQH4FD"
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 📝 Licença
 
-## Deploy on Vercel
+Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para obter mais detalhes.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+---
