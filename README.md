@@ -44,7 +44,7 @@ $ yarn start
 
 ## ⭐ Configurando o Firebase
 
-# Caso queira criar seu próprio projeto no Firebase
+#### Caso queira criar seu próprio projeto no Firebase
 
 Crie um projeto no [Firebase](https://firebase.google.com/?hl=pt-br), ative o Realtime Database e a autenticação com Google e com E-mail/senha.
 Adicione um arquivo `.env.local` na raíz do projeto com o seguinte formato:
@@ -60,7 +60,7 @@ NEXT_PUBLIC_APP_ID= ADICIONE AQUI SEUS DADOS
 NEXT_PUBLIC_MEASUREMENT_ID= ADICIONE AQUI SEUS DADOS
 ```
 
-# Caso queira utilizar meu projeto já existente
+#### Caso queira utilizar meu projeto já existente
 
 Adicione um arquivo `.env.local` na raíz do projeto com o seguinte formato:
 
