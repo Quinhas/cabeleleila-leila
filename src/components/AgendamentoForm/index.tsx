@@ -43,7 +43,18 @@ interface SelectedServiceProps extends ServiceProps {
   hour?: string;
 }
 
-export default function AgendamentoForm(props: AgendamentoProps) {
+type AgendamentoFormProps = {
+  clienteId?: string;
+  name?: string;
+  date?: string;
+  hour?: string;
+  id?: string;
+  phone?: string;
+  services?: SelectedServiceProps[];
+  status?: string;
+};
+
+export default function AgendamentoForm(props: AgendamentoFormProps) {
   const [availableHours, setAvailableHours] = useState<string[]>(defaultHours);
   const [unavailableHours, setUnavailableHours] = useState<string[]>([]);
   const [previousHour, setPreviousHour] = useState<string>();
@@ -129,7 +140,7 @@ export default function AgendamentoForm(props: AgendamentoProps) {
   });
 
   const handleDateChange = useCallback(
-    async (date: string = props.date) => {
+    async (date: string = props?.date ?? "") => {
       setLoadingAvailableHours(true);
       if (!date || date.trim().length === 0) {
         setAvailableHours(defaultHours);
@@ -358,7 +369,11 @@ export default function AgendamentoForm(props: AgendamentoProps) {
                     {...field}
                     type="date"
                     placeholder="Data do Atendimento"
-                    min={isAdmin ? '' : format(add(new Date(), { days: 3 }), "yyyy-MM-dd")}
+                    min={
+                      isAdmin
+                        ? ""
+                        : format(add(new Date(), { days: 3 }), "yyyy-MM-dd")
+                    }
                     h={"2.875rem"}
                     borderRadius={"0.5rem"}
                     p={"0 1rem"}
