@@ -8,6 +8,8 @@
   <img src="https://img.shields.io/github/stars/Quinhas/cabeleleila-leila?label=stars&message=MIT&color=5965E0&labelColor=121214" alt="Stars">
 </p>
 
+[Demo](https://cabeleleila-leila.vercel.app/)
+
 ## ✨ Tecnologias
 
 Esse projeto foi desenvolvido com as seguintes tecnologias:
@@ -47,9 +49,9 @@ $ yarn start
 #### Caso queira criar seu próprio projeto no Firebase
 
 Crie um projeto no [Firebase](https://firebase.google.com/?hl=pt-br), ative o Realtime Database e a autenticação com Google e com E-mail/senha.
-Adicione um arquivo `.env.local` na raíz do projeto com o seguinte formato:
+Adicione um arquivo `.env.local` na raiz do projeto com o seguinte formato:
 
-```
+```shell
 NEXT_PUBLIC_API_KEY= ADICIONE AQUI SEUS DADOS
 NEXT_PUBLIC_AUTH_DOMAIN= ADICIONE AQUI SEUS DADOS
 NEXT_PUBLIC_DATABASE_URL= ADICIONE AQUI SEUS DADOS
@@ -62,9 +64,9 @@ NEXT_PUBLIC_MEASUREMENT_ID= ADICIONE AQUI SEUS DADOS
 
 #### Caso queira utilizar meu projeto já existente
 
-Adicione um arquivo `.env.local` na raíz do projeto com o seguinte formato:
+Adicione um arquivo `.env.local` na raiz do projeto com o seguinte formato:
 
-```
+```shell
 NEXT_PUBLIC_API_KEY="AIzaSyB7bNltkNPGIUbSo1UP4zTcMjysotdIOoQ"
 NEXT_PUBLIC_AUTH_DOMAIN="cabeleleila-leila.firebaseapp.com"
 NEXT_PUBLIC_DATABASE_URL="https://cabeleleila-leila-default-rtdb.firebaseio.com"
@@ -72,7 +74,7 @@ NEXT_PUBLIC_PROJECT_ID="cabeleleila-leila"
 NEXT_PUBLIC_STORAGE_BUCKET="cabeleleila-leila.appspot.com"
 NEXT_PUBLIC_MESSAGINING_SENDER_ID="238209154302"
 NEXT_PUBLIC_APP_ID="1:238209154302:web:bb0f57faf8e2d2cac079af"
-NEXT_PUBLIC_MEASUREMENT_ID="G-9XDMNQH4FD
+NEXT_PUBLIC_MEASUREMENT_ID="G-9XDMNQH4FD"
 ```
 
 ## 📝 Licença
