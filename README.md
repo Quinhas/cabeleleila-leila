@@ -92,6 +92,10 @@ E-mail: admin@admin.com
 Senha: dsincabeleleilaleila
 ```
 
+## 🔧 Serviços
+
+Antes de criar um agendamento, é necessário entrar pelo perfil de administrador e criar serviços, caso contrário não aparecerá nenhum serviço disponível no cadastro de agendamentos.
+
 ## 📝 Licença
 
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para obter mais detalhes.
